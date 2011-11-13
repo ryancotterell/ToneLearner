@@ -6,30 +6,65 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Contains the pitch of the sound over time
+ * 
+ * @author ryan
+ * 
+ */
 
 public class Pitch {
+
+	/**
+	 * Linux identification
+	 */
+
 	private static final String LINUX = "Linux";
+
+	/**
+	 * Unix identification
+	 */
+
 	private static final String UNIX = "Unix";
+
+	/**
+	 * Mac OSX identification
+	 */
+
 	private static final String MAC = "Mac OS X";
 
+	/**
+	 * HashMap that maps time points to pitch values
+	 */
+
 	private Map<Double, Double> points;
+
+	/**
+	 * Creates a new pitch object from the file passed in the constructor
+	 * 
+	 * @param file
+	 *            the name of the file
+	 */
 
 	public Pitch(String file) {
 		points = new HashMap<Double, Double>();
 		String s = null;
 		String os = System.getProperty("os.name");
 		String location;
+		// determines the os and calls praat appropriately
 		if (os.equals(LINUX) || os.equals(UNIX)) {
-			location = "praat " + System.getProperty("user.dir") + "/pitch.praat " + file;
+			location = "praat " + System.getProperty("user.dir")
+					+ "/pitch.praat " + file;
 		} else if (os.equals(MAC)) {
-			location = "/Applications/Praat.app/Contents/MacOS/Praat " + System.getProperty("user.dir") + "/pitch.praat "
-					+ file;
+			location = "/Applications/Praat.app/Contents/MacOS/Praat "
+					+ System.getProperty("user.dir") + "/pitch.praat " + file;
 		} else {
 			location = null;
-			System.out.println("Fuck Windows");
+			System.out.println("Sorry, no Windows");
 			System.exit(0);
 		}
 
+		// attempts to read the file
 		try {
 			Process p = Runtime.getRuntime().exec(location);
 
@@ -57,11 +92,17 @@ public class Pitch {
 				System.out.println(s);
 			}
 
-		} catch (IOException e) {
+		} catch (IOException ex) {
 			System.out.println("exception occured!");
-			e.printStackTrace();
+			ex.printStackTrace();
 		}
 	}
+
+	/**
+	 * Returns the the map of pitch values of time
+	 * 
+	 * @return the hashmap of pitch values over time
+	 */
 
 	public Map<Double, Double> getPoints() {
 		return points;
