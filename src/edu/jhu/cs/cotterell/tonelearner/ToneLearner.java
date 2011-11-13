@@ -38,12 +38,30 @@ public class ToneLearner extends JFrame {
 	 */
 
 	private static final String TITLE = "Tone Learner";
+	
+	/**
+	 * File menu text
+	 */
+	
+	private static final String FILE = "File";
 
+	/**
+	 * Load menu item text
+	 */
+	
+	private static final String LOAD = "Load";
+	
+	/**
+	 * Exit menu item text
+	 */
+	
+	private static final String EXIT = "Exit";
+	
 	/**
 	 * The Contour JPanel
 	 */
 
-	private ContourPanel ContourPanel;
+	private ContourPanel contourPanel;
 
 	/**
 	 * ControlPanel JPanel
@@ -61,45 +79,27 @@ public class ToneLearner extends JFrame {
 
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
-		ContourPanel = new ContourPanel();
-		ContourPanel.setPreferredSize(new Dimension(CONTOUR_WIDTH, HEIGHT));
+		contourPanel = new ContourPanel();
+		contourPanel.setPreferredSize(new Dimension(CONTOUR_WIDTH, HEIGHT));
 
-		controlPanel = new ControlPanel(this);
+		controlPanel = new ControlPanel(new NewSoundListener());
 
 		mainPanel.add(controlPanel, BorderLayout.WEST);
-		mainPanel.add(ContourPanel, BorderLayout.CENTER);
+		mainPanel.add(contourPanel, BorderLayout.CENTER);
 
 		// create menu bar
 		JMenuBar menuBar = new JMenuBar();
-		JMenu menu = new JMenu("File");
+		JMenu menu = new JMenu(FILE);
 		menuBar.add(menu); // add items to menu JMenuItem help
-		JMenuItem load = new JMenuItem("Load");
+		JMenuItem load = new JMenuItem(LOAD);
+		JMenuItem exit = new JMenuItem(EXIT);
 		load.addActionListener(new MenuListener());
+		exit.addActionListener(new MenuListener());
 		menu.add(load);
+		menu.add(exit);
 
 		// add to frame
 		this.setJMenuBar(menuBar);
-		this.add(mainPanel);
-		this.setResizable(false);
-		this.pack();
-		this.setVisible(true);
-	}
-
-	/**
-	 * Updates the contour. Generally called when a new sound has been recorded
-	 * and analyzed
-	 * 
-	 * @param contourPanel
-	 */
-
-	public void updateContour(ContourPanel contourPanel) {
-		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new BorderLayout());
-		contourPanel.setPreferredSize(new Dimension(CONTOUR_WIDTH, HEIGHT));
-
-		mainPanel.add(controlPanel, BorderLayout.WEST);
-		mainPanel.add(contourPanel, BorderLayout.EAST);
-
 		this.add(mainPanel);
 		this.setResizable(false);
 		this.pack();
@@ -116,10 +116,48 @@ public class ToneLearner extends JFrame {
 		new ToneLearner();
 	}
 	
+	/**
+	 * Listens for actions regarding the menu
+	 * @author ryan
+	 *
+	 */
+	
 	class MenuListener implements ActionListener {
 
+		/**
+		 * If a action occurs.
+		 * In this case if a button is pressed
+		 */
+		
 		public void actionPerformed(ActionEvent e) {
-			ToneLearner.this.updateContour(new ContourPanel("forvo"));
+			if (e.getActionCommand().equals(LOAD)) {
+				ToneLearner.this.contourPanel.updatePitch("forvo");
+				ToneLearner.this.controlPanel.setSoundFile("forvo");
+			}
+			else if (e.getActionCommand().equals(EXIT)) {
+				System.exit(0);
+			}
+		}
+	}
+	
+	/**
+	 * Listens for changes in the contour in
+	 * the control panel  and updates the gui accordingly
+	 * @author ryan
+	 *
+	 */
+	
+	class NewSoundListener {
+		
+		/**
+		 * Tells the contour panel to the
+		 * contour of the sound file given
+		 * @param file the sound file name
+		 */
+		
+		public void updateContour(String file) {
+			ToneLearner.this.contourPanel.updatePitch(file);
+
 		}
 	}
 }

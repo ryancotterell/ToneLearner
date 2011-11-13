@@ -10,6 +10,9 @@ import java.awt.Font;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.sound.sampled.LineUnavailableException;
+
+import edu.jhu.cs.cotterell.tonelearner.ToneLearner.NewSoundListener;
+
 import java.io.IOException;
 import java.awt.Color;
 
@@ -96,11 +99,16 @@ public class ControlPanel extends JPanel {
 	private WavAudioRecorder audioRecorder;
 
 	/**
-	 * The main gui, needed to update the contour
+	 * passes all new sounds for the listener
 	 */
 
-	private ToneLearner gui;
-
+	private NewSoundListener listener;
+	
+	/**
+	 * Current sound file
+	 */
+	private String soundFile;
+	
 	/**
 	 * Creates a new control panel
 	 * 
@@ -108,8 +116,10 @@ public class ControlPanel extends JPanel {
 	 *            the gui it needs to modify
 	 */
 
-	public ControlPanel(ToneLearner gui) {
-		this.gui = gui;
+	public ControlPanel(NewSoundListener listener) {
+		this.listener = listener;
+		this.soundFile = SOUND_FILE;
+		
 		this.setBackground(Color.BLUE);
 
 		this.setLayout(new FlowLayout());
@@ -126,6 +136,24 @@ public class ControlPanel extends JPanel {
 		this.play.addActionListener(new PlayListener());
 		this.add(record);
 		this.add(play);
+	}
+
+	/**
+	 * Returns the current sound file
+	 * @return
+	 */
+	
+	public String getSoundFile() {
+		return soundFile;
+	}
+	
+	/**
+	 * Updates the current sound file
+	 * @param soundFile new sound file
+	 */
+
+	public void setSoundFile(String soundFile) {
+		this.soundFile = soundFile;
 	}
 
 	/**
@@ -148,7 +176,7 @@ public class ControlPanel extends JPanel {
 		 */
 
 		public void actionPerformed(ActionEvent e) {
-			String location = System.getProperty("user.dir") + "/" + SOUND_FILE;
+			String location = System.getProperty("user.dir") + "/" + soundFile;
 			new WavAudioPlayer(location).start();
 		}
 	}
@@ -230,7 +258,7 @@ public class ControlPanel extends JPanel {
 		 */
 
 		public void run() {
-			ControlPanel.this.gui.updateContour(new ContourPanel(SOUND_FILE));
+			ControlPanel.this.listener.updateContour(SOUND_FILE);
 			ControlPanel.this.play.setEnabled(true);
 			ControlPanel.this.record.setEnabled(true);
 		}
