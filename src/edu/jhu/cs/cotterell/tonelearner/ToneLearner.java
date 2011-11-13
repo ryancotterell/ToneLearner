@@ -2,6 +2,9 @@ package edu.jhu.cs.cotterell.tonelearner;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -68,10 +71,11 @@ public class ToneLearner extends JFrame {
 
 		// create menu bar
 		JMenuBar menuBar = new JMenuBar();
-		JMenu menu = new JMenu("Help");
+		JMenu menu = new JMenu("File");
 		menuBar.add(menu); // add items to menu JMenuItem help
-		JMenuItem help = new JMenuItem("Help");
-		menu.add(help);
+		JMenuItem load = new JMenuItem("Load");
+		load.addActionListener(new MenuListener());
+		menu.add(load);
 
 		// add to frame
 		this.setJMenuBar(menuBar);
@@ -85,16 +89,16 @@ public class ToneLearner extends JFrame {
 	 * Updates the contour. Generally called when a new sound has been recorded
 	 * and analyzed
 	 * 
-	 * @param contour
+	 * @param contourPanel
 	 */
 
-	public void updateContour(ContourPanel contour) {
+	public void updateContour(ContourPanel contourPanel) {
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
-		contour.setPreferredSize(new Dimension(CONTOUR_WIDTH, HEIGHT));
+		contourPanel.setPreferredSize(new Dimension(CONTOUR_WIDTH, HEIGHT));
 
 		mainPanel.add(controlPanel, BorderLayout.WEST);
-		mainPanel.add(contour, BorderLayout.EAST);
+		mainPanel.add(contourPanel, BorderLayout.EAST);
 
 		this.add(mainPanel);
 		this.setResizable(false);
@@ -110,5 +114,12 @@ public class ToneLearner extends JFrame {
 
 	public static void main(String[] args) {
 		new ToneLearner();
+	}
+	
+	class MenuListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent arg0) {
+			ToneLearner.this.updateContour(new ContourPanel("forvo"));
+		}
 	}
 }
