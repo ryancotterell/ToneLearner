@@ -4,7 +4,7 @@ form input
 	sentence File
 endform
 
-threshold = 60
+threshold = 0
 for_modifier = 100;
 
 extension$="wav"

@@ -1,0 +1,1 @@
+javac -d bin -cp bin -sourcepath $(find src -name '*.java')

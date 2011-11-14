@@ -1,0 +1,1 @@
+java -cp bin edu.jhu.cs.cotterell.tonelearner.ToneLearner
