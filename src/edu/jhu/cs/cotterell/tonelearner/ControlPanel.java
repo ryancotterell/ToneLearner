@@ -118,7 +118,6 @@ public class ControlPanel extends JPanel {
 
 	public ControlPanel(NewSoundListener listener) {
 		this.listener = listener;
-		this.soundFile = SOUND_FILE;
 		
 		this.setBackground(Color.BLUE);
 
@@ -176,8 +175,11 @@ public class ControlPanel extends JPanel {
 		 */
 
 		public void actionPerformed(ActionEvent e) {
-			String location = System.getProperty("user.dir") + "/" + soundFile;
-			new WavAudioPlayer(location).start();
+			if (soundFile != null) {
+				//throw no sound recorded error
+				String location = System.getProperty("user.dir") + "/" + soundFile;
+				new WavAudioPlayer(location).start();
+			}
 		}
 	}
 
@@ -220,6 +222,7 @@ public class ControlPanel extends JPanel {
 			}
 			// if the audio recorder hasn't been initialized
 			else {
+				ControlPanel.this.soundFile = SOUND_FILE;
 				ControlPanel.this.record.setText(START_RECORDING);
 				audioRecorder.stopRecording();
 				try {
