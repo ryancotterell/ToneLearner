@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public class ContourPanel extends JPanel {
-
+	
 	/**
 	 * The pitch object
 	 */
@@ -46,12 +46,28 @@ public class ContourPanel extends JPanel {
 		pitch = new Pitch(fileName);
 		paint = true;
 	}
-
+	
+	/**
+	 * Updates the pitch countour
+	 */
+	
+	public void updatePitch(String file) {
+		this.paint = true;
+		if (pitch == null) {
+			this.pitch = new Pitch(file);
+		}
+		else {
+			this.pitch.updatePoints(file);
+		}
+		repaint();
+	}
+	
 	/**
 	 * Paints the contour
 	 */
 
 	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		if (paint) {
 			g.setColor(Color.BLACK);
 

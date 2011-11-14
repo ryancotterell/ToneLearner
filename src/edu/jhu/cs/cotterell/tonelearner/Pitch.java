@@ -34,6 +34,13 @@ public class Pitch {
 	private static final String MAC = "Mac OS X";
 
 	/**
+	 * The filename of the sound file that this pitch object
+	 * has analyzed
+	 */
+	
+	private String file;
+	
+	/**
 	 * HashMap that maps time points to pitch values
 	 */
 
@@ -47,6 +54,25 @@ public class Pitch {
 	 */
 
 	public Pitch(String file) {
+		this.updatePoints(file);
+	}
+	
+	/**
+	 * Updates the hashmap based on the suond file
+	 * entered in the constructor.
+	 */
+	
+	public void updatePoints() {
+		updatePoints(this.file);
+	}
+	
+	/**
+	 * Updates the hashmap based on the sound file entered
+	 * @param file the file entered
+	 */
+	
+	public void updatePoints(String file) {
+		this.file = file;
 		points = new HashMap<Double, Double>();
 		String s = null;
 		String os = System.getProperty("os.name");
